@@ -1,0 +1,29 @@
+---
+- hosts: access-points
+  gather_facts: false
+  connection: local
+
+  tasks:
+  - name: credential login
+    include_vars: secret.yml
+
+  - name: define provider
+    set_fact:
+      provider:
+        host: "{{ inventory_hostname }}"
+        username: "{{ creds['username'] }}"
+        password: "{{ creds['password'] }}"
+        auth_pass: "{{ creds['auth_pass'] }}"
+
+  - name: RUN 'set NTP'
+    ios_config:
+      provider: "{{ provider }}"
+      lines:
+        - sntp server 119.82.243.189
+        - sntp server 203.89.31.13
+      authorize: yes
+    register: set_ntp
+
+  - name: check change - ntp
+    when: "(set_ntp.changed == true)"
+    set_fact: configured=true

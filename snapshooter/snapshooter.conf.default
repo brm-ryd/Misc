@@ -1,0 +1,17 @@
+# application name
+NAME=snapshooter
+
+# folders
+CONF_DIR=/etc/${NAME}
+MONITOR_DIR=${CONF_DIR}/monitor.d
+LOG_DIR=/var/log/${NAME}
+LOCK_DIR=/var/lock/${NAME}
+DATAS_DIR=/var/${NAME}
+BACKUP_DIR=${DATAS_DIR}/backups
+
+# files
+PID_FILE=/var/run/${NAME}.pid
+PROCESS_FILE=${DATAS_DIR}/process.tmp
+
+# binaries
+SNAPSHOOTER_VERSIONER_BIN=/usr/sbin/${NAME}-versioner

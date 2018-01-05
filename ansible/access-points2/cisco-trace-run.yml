@@ -1,0 +1,22 @@
+---
+- name: run traceroute
+  hosts: access-points
+  gather_facts: false
+  remote_user: adminfirsttel
+
+  vars:
+    loopbacks: {
+	"R1": "10.0.55.241",
+	"R2": "10.0.55.242",
+	"R3": "10.0.55.243",
+     }
+
+  tasks:
+    - name: run traceroute to every hosts
+      raw: traceroute {{ item.value }} source Loopback0 probe 1 numeric
+      when: item.key != inventory_hostname
+      with_dict: loopbacks
+      register: trace_result
+
+#   - name: debug registered variables
+#     debug: var=trace_result

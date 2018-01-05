@@ -1,0 +1,32 @@
+---
+- hosts: access-points
+  gather_facts: false
+  connection: local
+
+  tasks:
+  - name: credential login
+    include_vars: secret.yml
+
+  - name: define provider
+    set_fact:
+      provider:
+        host: "{{ inventory_hostname }}"
+        username: "{{ creds['username'] }}"
+        password: "{{ creds['password'] }}"
+        auth_pass: "{{ creds['auth_pass'] }}"
+
+  - name: run show version
+    ios_command:
+      provider: "{{ provider }}"
+      commands:
+       - show version
+    register: version
+ 
+  - debug: var=version.stdout_lines
+  
+  - name: BACKUP
+    ios_config:
+       provider: "{{ provider }}"
+       backup: yes
+       authorize: yes
+       

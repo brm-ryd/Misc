@@ -1,0 +1,44 @@
+---
+- hosts: access-points
+  gather_facts: false
+  connection: local
+
+  tasks:
+  - name: credential login
+    include_vars: secret.yml
+
+  - name: define provider
+    set_fact:
+      provider:
+        host: "{{ inventory_hostname }}"
+        username: "{{ creds['username'] }}"
+        password: "{{ creds['password'] }}"
+        auth_pass: "{{ creds['auth_pass'] }}"
+
+  - name: deactivate apply rule ACL
+    ios_config:
+      provider: "{{ provider }}"
+      lines: no dot11 association mac-list 700
+      authorize: yes
+
+  - name: clear access-list
+    ios_config:
+      provider: "{{ provider }}"
+      lines: no access-list 700
+      authorize: yes
+
+  - name: adding ACL
+    ios_config:
+      provider: "{{ provider }}"
+      lines:
+        - access-list 700 deny 4c49.e321.6900 0000.0000.0000
+        - access-list 700 deny 4c3c.16e8.e530 0000.0000.0000
+        - access-list 700 permit 0000.0000.0000 ffff.ffff.ffff
+      authorize: yes
+
+  - name: apply acl into interface dot11
+    ios_config:
+      provider: "{{ provider }}"
+      lines:
+        - dot11 association mac-list 700
+      authorize: yes

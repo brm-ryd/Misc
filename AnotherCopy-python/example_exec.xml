@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<project minimum_sc_version="1.1" name="Execute commands in the OS"
+	description="Simple demonstration of os execution of passed commands."
+	default="compile" basedir="." >
+	<!--Copy YHW dev files to production checkout-->
+	<property name='replace_tags' value='1' />
+	<property name='src' value='./' />
+	<property name='reportSampleFreq' value='120' />
+	<property name='destPath' value='/var/www/html-wiki/images/' />
+	<property name='path_mysql' value='' />
+	<tag name='mytag' value='123'/>
+	<tag name='home' value='./' />
+
+	<mysql enabled='0' action='query' db_host='localhost' db_name='mysql' username='root' password='password'
+		query='SELECT User, Host FROM user' msg='Querying the user database' />
+	<exec value='dir again' reporterror='1' />
+	<log msg='Executed dir listing - screen ' toscreen='1' tofile='0' />
+	<log msg='Executed dir listing - file' toscreen='0' tofile='1' />
+	<exec enabled='0' dir="${src}" executable="cmd.exe" os="Windows" output="dir.txt">
+		<arg line="/c dir"/>
+	</exec>
+</project>

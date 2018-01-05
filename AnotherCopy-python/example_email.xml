@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<project minimum_sc_version="1.1" name="Send an email from a script"
+	description="Sends an email either using sendmail or SMTP"
+	default="compile" basedir="." >
+	<!--Copy YHW dev files to production checkout-->
+	<property name='replace_tags' value='1' />
+	<property name='src' value='./' />
+	<property name='reportSampleFreq' value='120' />
+	<property name='destPath' value='/var/www/html-wiki/images/' />
+	<property name='path_mysql' value='' />
+	<tag name='mytag' value='123'/>
+	<tag name='home' value='./' />
+	<email from='test@example.com' to='dest@example.com' subject='Welcome to Smart Copy' body='Hope you like it!\n' />
+	<log msg='Executed dir listing - screen ' toscreen='1' />
+</project>

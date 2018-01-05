@@ -1,0 +1,8 @@
+; configuration file to monitor a directory for file changes (and backup them)
+
+; the full path to the directory
+path=/etc
+; delay (in seconds) between checks for file changes and backup
+delay=6400
+; the depth recursive directory
+depth=*

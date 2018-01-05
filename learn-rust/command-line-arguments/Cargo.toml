@@ -1,0 +1,6 @@
+[package]
+name = "command-line-arguments"
+version = "0.1.0"
+authors = ["nubie"]
+
+[dependencies]

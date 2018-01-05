@@ -1,0 +1,25 @@
+-- How it works ?
+======================================================================
+*The service script
+The service script starts and stops the daemon.
+For debian users :
+   Use 'sudo /etc/init.d/braincracks start' to manually start the service (it is started automatically when the system boots up).
+   Use 'sudo /etc/init.d/braincracks stop' to manually stop the service (it is stoped automatically when the system shutdown).
+
+*daemon script
+The daemon script launches a versioner script instance for each folder specified in the folder.lst file.
+When it receives a stoping signal (SIGINT or SIGTERM) it tells each versioner's started instance to stop their job and exit cleanly.
+
+*versioner script
+takes two parameters (given by the daemon script).
+The first is the path of the folder to monitor, the second is the delay between checks/backups.
+Then it starts a loop made of :
+1. check files changes
+2. backup files which have changed
+3. sleep (programmatically : wait) until the delay is reached
+When it receives a stoping signal (SIGINT or SIGTERM) it stops its current job and exit cleanly.
+Throughout the process, 2 files are used :
+- a lock file created prevent being ran twice.
+- a process file updated to mark the folder as "watched" to prevent being watched twice.
+To check for files changes the script use the find command and gets files changed since a timestamp's file reference.
+To backup files, the script re-creates the folder hierarchy and puts a copy of the file (suffixed by the current time)
