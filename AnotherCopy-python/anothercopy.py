@@ -20,7 +20,7 @@ class anothercopy:
 	curZip = None
 	curZipInc = 0
 	ignoreSVN = True
-	exclusionList = ("jpg","ppt","gif","mov","avi","mp3","swf")
+	exclusionList = ("mov","avi","mp3","swf","mp4") #prevent all files being backup/copy
 	archiveList = []
 	cmdOptions = None
 	cmdArgs = None
@@ -532,7 +532,7 @@ class anothercopy:
 				print usage
 				return
 
-		srcDir = "c:/TestCompress/"
+		srcDir = "c:/CompressFolder/"
 		archivePath = "c:/"
 		archiveFile = "Test_BU022108"
 		if len(args)==1:
@@ -565,4 +565,3 @@ if __name__ == '__main__':
 	parser.add_option("-t", "--test",action="store_true", dest="testmode", default=False,help="Don't actually copy or create files")
 	(options, args) = parser.parse_args()
 	AnotherCopy.controller(options,args)
-
