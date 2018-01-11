@@ -31,8 +31,9 @@
     ios_config:
       provider: "{{ provider }}"
       lines:
-        - access-list 700 deny 4c49.e321.6900 0000.0000.0000
-        - access-list 700 deny 4c3c.16e8.e530 0000.0000.0000
+        # ''####'' as mac address
+        #- access-list 700 deny ####.####.#### 0000.0000.0000
+        #- access-list 700 deny ####.####.#### 0000.0000.0000
         - access-list 700 permit 0000.0000.0000 ffff.ffff.ffff
       authorize: yes
 
