@@ -1,3 +1,4 @@
+#incomplete
 import yaml
 import re
 SCENARIO_FILE="scenarios/all.txt"
