@@ -1,0 +1,11 @@
+- name: setup & start iis web server win server
+  hosts: win-server
+
+  tasks:
+    - name: setup iis
+      win_feature:
+        name: "web-server"
+        state: present
+        restart: yes
+        include_sub_features: yes
+        include_management_tools: yes

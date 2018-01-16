@@ -1,0 +1,43 @@
+- name: scan file using VirusTotalApi
+  hosts: vir-repos
+  gather_facts: false
+
+  include_vars: api_key.yml
+  vars:
+    vt_api_key: "{{ creds['apikey'] }}"
+    vt_api_type: private #public/private
+    vt_intelligence_access: True
+    files_in_local_system: /tmp/repos-scan/
+    files_in_remote_system: /tmp/repos-file/
+
+  tasks:
+    - name: mkdir sample dir
+      file:
+        path: "{{ files_in_remote_system }}"
+        state: directory
+
+    - name: copy file into remote system
+      copy:
+        src: "{{ files_in_local_system }}"
+        dest: "{{ files_in_remote_system }}"
+        directory_mode: yes
+
+    - name: copy conf
+      template:
+        src: config.j2
+        dest: "{{ files_in_remote_system }}/.vtapi"
+
+    - name: running scan in VirusTotal
+      command: "vt -fr {{ files_in_remote_system }}"
+      args:
+        chdir: "{{ files_in_remote_system }}"
+      register: vt_scan
+
+    - name: remove files
+      file:
+        path: "{{ files_in_remote_system }}"
+        state: absent
+
+    - name: results scan
+      debug:
+        msg: "{{ vt_scan.stdout_lines }}"

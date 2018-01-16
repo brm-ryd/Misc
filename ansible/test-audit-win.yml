@@ -1,0 +1,13 @@
+- name: Windows Audit
+  hosts: win-server
+
+  tasks:
+    - name: download audit script
+      win_get_url:
+        url: https://raw.githubusercontent.com/Windows-Workstation-and-Server-Audit/master/audit.ps1
+        dest: C:\Users\audit.ps1
+
+    - name: running script
+      win_shell: C:\Users\audit.ps1
+      args:
+        chdir: C:\
