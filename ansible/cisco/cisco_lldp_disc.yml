@@ -1,0 +1,34 @@
+---
+- name: ScanLLDP Neighbors
+  hosts: "devices"
+  gather_facts: false
+  connection: local
+
+  tasks:
+    - name: credential login
+      include_vars: secret.yml
+
+    - name: define provider
+      set_fact:
+        provider:
+          host: "{{ inventory_hostname }}"
+          username: "{{ creds['username'] }}"
+          password: "{{ creds['password'] }}"
+          auth_pass: "{{ creds['auth_pass'] }}"
+
+    - name: Query for LLDP Neighbors
+      ios_command:
+        commands: show lldp neighbors
+        provider: "{{ cli }}"
+
+      register: output
+
+    - name: show output
+      debug:
+        var: output
+
+    - name: copy output to file
+      copy: content="{{ output.stdout_lines }}" dest="./tmp/{{ inventory_hostname }}_lldp_output.txt"
+
+    - name: Execute Python script to render output
+      command: ./lldp_graph.py
