@@ -20,7 +20,7 @@ class anothercopy:
 	curZip = None
 	curZipInc = 0
 	ignoreSVN = True
-	exclusionList = ("mov","avi","mp3","swf","mp4") #prevent all files being backup/copy
+	exclusionList = ("mov","avi","mp3","swf","mp4") # file exclusion extension
 	archiveList = []
 	cmdOptions = None
 	cmdArgs = None
