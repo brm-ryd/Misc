@@ -7,7 +7,7 @@ MONITOR_DIR=${CONF_DIR}/monitor.d
 LOG_DIR=/var/log/${NAME}
 LOCK_DIR=/var/lock/${NAME}
 DATAS_DIR=/var/${NAME}
-BACKUP_DIR=${DATAS_DIR}/backups
+BACKUP_DIR=${DATA_DIR}/backups
 
 # files
 PID_FILE=/var/run/${NAME}.pid

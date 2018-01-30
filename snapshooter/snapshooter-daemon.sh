@@ -122,10 +122,10 @@ cleanExit() {
 	fi
 
 	echo "Killing children ..." >> "${log_file}"
-	# for each of its children pid
+	# loop each its children pid
 	for p in ${children}
 	do
-		# send term signal to child
+		# send terminate signal to child
 		if ps --pid ${p} -o pid,ppid |grep -E "^[[:space:]]*${p}[[:space:]]+$$[[:space:]]*$" >/dev/null 2>&1
 		then
 			echo "Sending term signal to child with PID ${p} ..." >> "${log_file}"
