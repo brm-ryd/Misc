@@ -1,0 +1,33 @@
+---
+  - name: install random password gen pack
+  apt: name={{item}} state=present
+  with_items:
+    - apg
+
+  - name: Random gen passwds
+  command: apg -n {{ pass_cnt }} -M NCL -q
+  register: passwds
+
+  - name: create users
+  os_user:
+    cloud: "{{ OPS-test1 }}"
+    state: present
+    name: "{{ item.0 }}"
+    password: "{{ item.1 }}"
+    domain: default
+  with_together:
+    - "{{ userid }}"
+    - "{{ passwds.stdout_lines }}"
+
+  - name: create users env
+  os_project:
+    cloud: "{{ OPS-test1 }}"
+    state: present
+    name: "{{ item }}"
+    description: "{{ item }}"
+    domain_id: default
+    enabled: True
+  with_items: "{{ tenantid }}"
+
+  - name: Assign users for spec role env
+  #os_user_role:
