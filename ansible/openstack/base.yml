@@ -1,0 +1,7 @@
+# Juno openstack user, role, etc
+
+- hosts: util_container
+ remote_user: root
+ become: True
+ roles:
+   create-users-env

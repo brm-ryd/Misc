@@ -30,4 +30,19 @@
   with_items: "{{ tenantid }}"
 
   - name: Assign users for spec role env
-  #os_user_role:
+  os_user_role:
+    cloud: "{{ OPS-test1 }}"
+    user: "{{ item:0 }}"
+    role: "{{ urole }}"
+    project: "{{ item.1 }}"
+  with_together:
+    - "{{ userid }}"
+    - "{{ tenantid }}"
+
+  - name: user password assignment
+  debug: msg="user {{ item.0 }} added to {{ item.2 }} project, password: {{ item.1 }}"
+  with_together:
+    - userid
+    - passwds.stdout_lines
+    - tenantid
+   
