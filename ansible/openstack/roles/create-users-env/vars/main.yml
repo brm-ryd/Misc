@@ -1,0 +1,6 @@
+---
+  pass_cnt: 10
+  #userid & tenantid list separate by comma ['user1','user2',... n]
+  userid: ['']
+  tenantid: ['']
+  urole: _member_

@@ -1,0 +1,3 @@
+# variables related global openstack for this util_container groups
+
+cloud_name: OPS-test1
