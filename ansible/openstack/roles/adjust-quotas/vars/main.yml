@@ -1,0 +1,3 @@
+---
+  qoptions: ['--cores 30', '--instances 20', '--cores 20', '--instances 20', '--cores 20']
+  tenantname: [''] #list tenant name

@@ -1,0 +1,7 @@
+---
+  - name: adjust tenant quotas
+  command: openstack --os-cloud="{{ OPS-test1 }}"
+            quota set "{{ item.1 }}" "{{ item.0 }}"
+  with together:
+    - "{{qoptions}}"
+    - "{{tenantname}}"
