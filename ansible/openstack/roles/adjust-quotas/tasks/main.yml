@@ -5,3 +5,8 @@
   with together:
     - "{{qoptions}}"
     - "{{tenantname}}"
+
+  - name: confirm tenant quota update
+  command: openstack --os-cloud="{{ OPS-test1 }}"
+            quota show "{{ item.0 }}"
+  with_items: "{{tenantname}}"
