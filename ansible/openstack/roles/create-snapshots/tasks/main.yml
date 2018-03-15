@@ -1,0 +1,7 @@
+---
+  - name: Retrieve tenantid
+  shell: openstack --os-cloud="{{ OPS-test1 }}"
+    project list | awk '/ "{{tenantname}}" / {print $2}'
+  register: tenantid
+
+  - name: retrieve instance id from tenant
