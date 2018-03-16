@@ -5,3 +5,16 @@
   register: tenantid
 
   - name: retrieve instance id from tenant
+  shell: openstack --os-cloud="{{ OPS-test1 }}"
+    server list --all-projects --project "{{ tenantid.stdout }}" | awk 'NR > 3 { print $2 }'
+  register: instid
+
+  - name: create instance snapshot
+  command: openstack --os-cloud="{{ OPS-test1 }}"
+    server image create --name="{{ tenantname }}"-snap-"{{ item }}" "{{ item }}"
+  with items:
+    "{{ instid.stdout_lines}}"
+  register: command_result
+  failed_when: "'_info' not in command_result.stderr"
+
+  - confirm instance snapshot
