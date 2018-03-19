@@ -84,7 +84,7 @@ echo
 
 # uninstalling service script
 cat <<EOL
-You should uninstall ${NAME} service
+Should uninstall ${NAME} service
    For debian user just type the following commands in the shell :
       # sudo /etc/init.d/${NAME} stop
       # sudo rm -f '${DEBIAN_SERVICE_PATH}'

@@ -55,7 +55,7 @@ fi
 uid=`id -u`
 if [ "${uid}" -ne 0 ]
 then
-	echo "Error : you should be root to run this installation (current uid is ${uid})" >&2
+	echo "Error : should be root to run this installation (current uid is ${uid})" >&2
 	echo
 	exit 1
 fi
@@ -134,11 +134,11 @@ echo
 
 # installing service script
 cat <<EOL
-You should install ${NAME} as a service to automatically starts / stops the daemon when system boots / shutdowns
+Should install ${NAME} as a service to automatically starts / stops the daemon when system boots / shutdowns
    For debian user just type the following commands in the shell :
       # sudo cp -f '${SRC_SERVICE_SCRIPT}' '${DEBIAN_SERVICE_PATH}'
       # sudo update-rc.d ${NAME} defaults
-      One this is done you can manually starts/stops and check the status of the daemon with :
+      One this is done it can manually starts/stops and check the status of the daemon with :
       # sudo /etc/init.d/${NAME} start
       # sudo /etc/init.d/${NAME} stop
       # sudo /etc/init.d/${NAME} status
@@ -148,12 +148,11 @@ EOL
 
 # edit configuration file and folder list
 cat <<EOL
-Now you should edit the configuration file (${CONF_FILE}) to adjust ${NAME} directories
-And you should also create/edit monitor files (in ${MONITOR_DIR}) to set directories you want to monitor for files changes
+Should edit the configuration file (${CONF_FILE}) to adjust ${NAME} directories
+And also create/edit monitor files (in ${MONITOR_DIR}) to set directories want to monitor for files changes
 
 EOL
 
 # how it works
 echo "To see how ${NAME} works, read USE.txt"
 echo
-
