@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: testapp-probe-live
+
+spec:
+  containers:
+    - image: noob/testapp-brokenapp
+      name: testapp
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 8000
+        initialDelaySeconds: 10

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: kubia-manual-v2
+  name: testapp-manual-labels
 
   labels:
     creation_method: manual
@@ -12,5 +12,5 @@ spec:
     - image: noob/testapp
       name: testapp
       ports:
-        - containerPort: 8080
+        - containerPort: 8000
           protocol: TCP
