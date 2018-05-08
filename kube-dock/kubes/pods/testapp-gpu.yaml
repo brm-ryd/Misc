@@ -1,0 +1,12 @@
+# use label selector to schedule pod to specific node
+apiVersion: v1
+kind: Pod
+metadata:
+  name: testapp-gpu
+spec:
+  nodeSelector:
+    gpu: "true"
+  containers:
+    - image: noob/testapp
+      name: testapp
+      
