@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: nginxservice
+  name: nginxservice
+spec:
+  ports:
+    # port this service serve on.
+    - port: 82
+  # Label keys and values that must match in order to receive traffic for this service.
+  selector:
+    app: nginx
+  	  type: LoadBalancer
