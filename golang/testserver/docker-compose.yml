@@ -1,0 +1,7 @@
+version: '2'
+services:
+    testserver:
+        image: testsrv-app
+    curl:
+        image: appropriate/curl
+        entrypoint: sh -c  "sleep 3 && curl -XPOST testsrvapp:8080/helloworld -d '{\"name\":\"NOOB\"}'"
