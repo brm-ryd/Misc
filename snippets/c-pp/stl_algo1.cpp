@@ -14,7 +14,7 @@ int main () {
   lst.unique();
 
   cout <<"nsize of list without duplicates is " << distance(lst.begin(), lst.end() ) << endl;
-  i.resize( distance(lst.begin(), lst.end() ) );
+  lst.resize( distance(lst.begin(), lst.end() ) );
 
   cout << "nlist after removing duplkicates ... " << endl;
   copy (lst.begin(), lst.end(), ostream_iterator<int>(cout, "t") );
