@@ -1,0 +1,17 @@
+apiVersion: batch/v1beta1
+kind: CronTask
+metadata:
+  name: task-every-10-mins
+spec:
+  schedule: "0,10,20,30 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: periodic-task
+        specs:
+          restartPolicy: onFailure
+          containers:
+          - name: main
+            image: noob/batch-task
