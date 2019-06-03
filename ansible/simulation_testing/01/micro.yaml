@@ -1,0 +1,11 @@
+---
+- name: apply MicroA
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+          - role: microA
+
+- name: apply MicroB
+  hosts: localhost
+  gather_facts: false  

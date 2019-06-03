@@ -1,0 +1,6 @@
+---
+- name: install microA package
+  debug:
+          msg: "test A"
+  changed_when: true
+  notify: restart microA
