@@ -1,11 +1,33 @@
-apiVersion: admissionregistration.k8s.io/v1beta1
-kind: ValidatingWebhookConfiguration
+---
+apiVersion: v1
+kind: Pod
 metadata:
         name: label-validation
-webhooks:
-        - name: admission.example.com
-          rules:
-                  - apiGroups:
-                          - ""
-                          apiVersions:
-                                  - v1
+        namespace: infrastructure
+        labels:
+                controller: label-validator
+spec:
+        containers:
+        - name: label-validator
+          image: label-validator:latest
+          volumeMounts:
+                  - mountPath: /tls
+                    name: tls
+        volumes:
+        - name: tls
+          secret:
+                  secretName: admission-tls
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+        name: label-validation
+        namespace: infrastructure
+spec:
+        selector:
+                controller: label-validator
+        ports:
+                - protocol: TCP
+                  port: 443
+
