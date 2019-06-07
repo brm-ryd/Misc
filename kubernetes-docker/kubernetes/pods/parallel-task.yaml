@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+        name: check-parallel
+spec:
+        activeDeadlineSeconds: 30
+        parallelism: 2
+        template:
+                spec:
+                        containers:
+                                - name: check-parallel
+                                  image: ubuntu
+                                  command: ["dpkg-query", "-l"]
+                        restartPolicy: Never
+#submit parallel task
+#kubectl create -f parallel-task.yaml
+#kubectl get pods - to see the running parallel
+                                                             
