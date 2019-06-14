@@ -41,5 +41,17 @@ set -e
 
 # check if web app inside container running
 #
-#NEW_WEBAPP_IP_ADDR=will inspect network setting ip address docker
-#check new docker and deploy if its not running
+NEW_WEBAPP_IP_ADDR=${docker inspect $NEW_WEBAPP_ID | jq '.[0].NetworkSettings.IPAddress' -r}
+if [ -z "$NEW_WEBAPP_ID_ADDR" -o "$NEW_WEBAPP_ID_ADDR" = "null" ]; then
+	echo "$(date + "%Y-%m-%d %H:%M:%S %Z") no new web app ip, FAILED to start"
+	# will send_deploy_message $HOSTNAME $BRANCH $IMAGE_NAME "error"
+	send_webhook $HOSTNAME $BRANCH $BUILD_ID $BUILD_NUMBER "failure"
+	exit 1
+fi
+
+echo -n "$(date + "%Y-%m-%d %H:%M:%S %Z") new instance $NEW_WEBAPP_ID starting, on ip $NEW_WEBAPP_IP_ADDR"
+# 5 minutes
+MAX_TIMEOUT=300
+HEALTH_RC=1
+set +e
+# check healthy container stats
