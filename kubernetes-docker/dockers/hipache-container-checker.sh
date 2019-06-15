@@ -55,3 +55,23 @@ MAX_TIMEOUT=300
 HEALTH_RC=1
 set +e
 # check healthy container stats
+until [ $HEALTH_RC == 0  ]; do
+	if [ $MAX_TIMEOUT -le 0 ]; then
+		echo "$(date + "%Y-%m-%d %H:%M:%S %Z") failed to be health in 5 mins, kill and exit..."
+		docker kill $NEW_WEBAPP_ID
+		docker rm $NEW_WEBAPP_ID
+		# send_deploy_message $HOSTNAME $BRANCH $IMAGE_NAME "error"
+		send_webhook $HOSTNAME $BRANCH $BUILD_ID $BUILD_NUMBER "failed"
+		exit 1
+	fi
+
+	${SCRIPT_HOME}/.health.sh $NEW_WEBAPP_IP_ADDR
+	HEALTH_RC=$?
+	echo -n "."
+	sleep 5
+	let MAX_TIMEOUT-=5
+done
+set -e
+echo ""
+
+#add as backend to REDIS
