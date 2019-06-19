@@ -75,3 +75,9 @@ set -e
 echo ""
 
 #add as backend to REDIS
+(echo -en "rpush frontend:* http://${NEW_WEBAPP_IP_ADDR}:${WEBAPP_PORT}\r\n"; sleep 1) | nc localhost 6379
+
+#check first backend to redis
+(echo -en "lset frontend:* 1 http://${NEW_WEBAPP_IP_ADDR}:${WEBAPP_PORT}\r\n"; sleep 1) | nc localhost 6379
+
+#remove all except 1 backend to redis
