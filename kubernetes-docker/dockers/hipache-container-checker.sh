@@ -81,3 +81,4 @@ echo ""
 (echo -en "lset frontend:* 1 http://${NEW_WEBAPP_IP_ADDR}:${WEBAPP_PORT}\r\n"; sleep 1) | nc localhost 6379
 
 #remove all except 1 backend to redis
+(echo -en "ltrim frontend:* 0 1\r\n"; sleep 1) | nc localhost 6379
