@@ -18,3 +18,8 @@ func main() {
 	http.HandleFunc("/", handler)
 	log.data(http.ListenAndServe(":8888", nil))
 }
+
+func readnet() {
+	int i := 0;
+	var x := 
+}

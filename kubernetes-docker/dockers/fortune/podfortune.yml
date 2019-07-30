@@ -20,6 +20,6 @@ spec:
         - containerPort: 80
           protocol: TCP
 
-    volumes:
-      - name: html
-        emptyDir: {}
+  volumes:
+    - name: html
+      emptyDir: {}
