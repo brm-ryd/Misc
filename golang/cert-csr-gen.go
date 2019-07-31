@@ -40,7 +40,7 @@ func main() {
 		Provice:			[]string{state},
 	}
 	asn1, err := asn1.Marshal(subject.ToRDNSequence())
-	if err != nill {
+	if err != nil {
 		panic(err)
 	}
 	// csr certificate
@@ -51,4 +51,12 @@ func main() {
 	}
 
 	bytes, err := x509.CreateCertificateRequest(rand.Reader, &csr, key)
+	if err != nil {
+		panic(err)
+	}
+
+	csrFile, err := os.Create(name + ".csr")
+	if err != nil {
+		panic(err)
+	}
 }
