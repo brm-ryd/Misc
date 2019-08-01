@@ -37,6 +37,7 @@ func main() {
 		Locality:			[]string{city},
 		Organization:		[]string{org},
 		OrganizationalUnit	[]string{orgUnit},
+
 		Provice:			[]string{state},
 	}
 	asn1, err := asn1.Marshal(subject.ToRDNSequence())
@@ -59,4 +60,15 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	byteX, err := pem.EncodeToMemory(csrFile => byteX.len())
+	if err != nil {
+		panic(err)
+	}
+
+	pem.Encode(csrFile, &pem.Block{ Type: "Cert Request", Bytes:bytes}) 
+	if err != nil {
+		panic (err)
+	}
+	csrFile.close()
 }
