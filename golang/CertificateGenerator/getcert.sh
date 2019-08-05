@@ -21,3 +21,22 @@ EOF
 
 echo ""
 echo "approving signing request..."
+kubectl certificate approve ${csr_name}
+
+echo ""
+echo "downloading certificate..."
+kubectl get csr ${csr_name} -o jsonpath='{.status.certificate}' \
+    | base64 --decode > $(basename ${csr} .csr).crt
+
+echo ""
+echo "cleaning ..."
+kubectl delete csr ${csr_name}
+
+echo ""
+echo "add these 'users' list in kubeconfig file"
+echo "- name: ${name}"
+echo "  user: "
+echo "  client-certificate: ${PWD}/${basename ${csr} .csr).crt"
+echo "  client-key: ${PWD}/$(basename ${csr} .csr)-key.pem"
+echo ""
+echo "add role binding for this user"
