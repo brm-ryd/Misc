@@ -29,11 +29,70 @@ def getGeoCordinates():
     """
     google servers map
     """
+    res = requests.post(url, data=myobj)
+    # print("HTTP RESPONSE STATUS FROM GOOGLE SERVERS: %d" % res.status_code)
+    geoCordinates = res.json()['location']
+    # accuracy = res.json()['accuracy'] # Accuracy is not considered in the POC because optimizations are out of scope
+    # print("Latitude: %s" % geoCordinates['lat'])
+    # print("Longitude: %s" % geoCordinates['lng'])
+    # print("Accuracy of the location: %s (in metres)" % accuracy)
+    lat = float("{:.7f}".format(geoCordinates['lat']))
+    long = float("{:.7f}".format(geoCordinates['lng']))
+    return (lat, long)
 
-def updateLocationHistory():
+
+def getCurrentTime():
+    dt = datetime.datetime.utcnow()
+    timestamp = time.mktime(dt.timetuple())
+    # print("Unix Timestamp: %d" % timestamp)
+    timestamp = int(timestamp)
+    return timestamp
+
+
+def Marshal(Tracking_ID, lat, long, timestamp):
+    # data_tuple_format = (id, lat, long, accuracy, timestamp)
+    data = {"id": Tracking_ID,
+            "latitude": lat,
+            "longitude": long,
+            "timestamp": timestamp
+            }
+    # json_data = json.dumps(data, indent=4, separators=(',', ': '), sort_keys=True)
+    # return json_data
+    return data
+
+
+def checkIfFileExists(walletAddress):
+    print("checkIfFileExists(): Checking if /dictao/" +
+          walletAddress+".json exists.")
+    pre_payload = {"path": "/dictao/"}
+    payload = json.dumps(pre_payload)
+    conn.request("POST", moibit_url+"listfiles", payload, moibit_header_obj)
+    res = conn.getresponse()
+    responseObject = json.loads(res.read())
+    if res.status == 200:
+        # print(responseObject['data']['Entries'])
+        if responseObject['data']['Entries'] == None:
+            print("checkIfFileExists(): /dictao/" +
+                  walletAddress+".json does not exist!")
+            return False, ""
+        else:
+            # print(len(responseObject['data']['Entries']))
+            for fileObject in responseObject['data']['Entries']:
+                # print(fileObject['Name'])
+                if walletAddress+".json" == fileObject['Name']:
+                    print("checkIfFileExists(): Found /dictao/"+walletAddress +
+                          ".json "+"with the hash "+fileObject['Hash'])
+                    return True, fileObject['Hash']
+    print("checkIfFileExists(): /dictao/" +
+          walletAddress+".json does not exist!")
+    return False, ""
+
+
+def updateLocationHistory(walletAddress, jsonData):
     """
     wallet location history data
     """
+    #(exists, cid) = function if file exists 
 
 def main():
     # fetch tracking from other functions tracking, wallet, etc
