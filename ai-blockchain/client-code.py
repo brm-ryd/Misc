@@ -94,6 +94,44 @@ def updateLocationHistory(walletAddress, jsonData):
     """
     #(exists, cid) = function if file exists 
 
+def CommitTxn(id, cid):
+    # print("Received wallet ID: "+id)
+    # print("Received latest CID: "+cid)
+    print("CommitTxn(): Connecting to the ethereum network")
+    w3 = Web3(Web3.HTTPProvider(blockchain_url))
+    # print(w3.eth.blockNumber)
+    print("CommitTxn(): Initializing the live contract instance at " +
+          os.environ['PROOF_SMART_CONTRACT_ADDRESS'])
+    contract = w3.eth.contract(
+        os.environ['PROOF_SMART_CONTRACT_ADDRESS'], abi=abi)
+    # print(contract.address)
+    # print(contract.abi)
+
+    print("CommitTxn(): Creating a raw transaction to call smart contract function setLatestCID()")
+    nonce = w3.eth.getTransactionCount(os.environ['WALLET_ADDRESS'])
+    setLatestCID_txn = contract.functions.setLatestCID(
+        os.environ['WALLET_ADDRESS'],
+        cid,
+    ).buildTransaction({
+        'chainId': 42,
+        'gas': 3000000,
+        'gasPrice': w3.toWei('1', 'gwei'),
+        'nonce': nonce,
+    })
+    print("CommitTxn(): Signing the raw transaction with private key")
+    signed_txn = w3.eth.account.sign_transaction(
+        setLatestCID_txn, private_key=os.environ['WALLET_PRIVATE_KEY'])
+    w3.eth.sendRawTransaction(signed_txn.rawTransaction)
+
+    tx_hash = w3.toHex(w3.keccak(signed_txn.rawTransaction))
+    tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+    print("CommitTxn(): Sucessfully updated the CID in the blockchain. Transaction receipt:\n", tx_receipt)
+
+    print("CommitTxn(): Checking the new/latest hash for the wallet from blockchain: " +
+          contract.functions.getLatestCID(os.environ['WALLET_ADDRESS']).call())
+    return tx_hash
+
+
 def main():
     # fetch tracking from other functions tracking, wallet, etc
     # incomplete
