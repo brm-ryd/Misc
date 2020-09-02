@@ -92,7 +92,77 @@ def updateLocationHistory(walletAddress, jsonData):
     """
     wallet location history data
     """
-    #(exists, cid) = function if file exists 
+    (exists, cid) = checkIfFileExists(walletAddress)
+    if exists:
+        pre_payload = {"hash": cid}
+        payload = json.dumps(pre_payload)
+        conn.request("POST", moibit_url+"readfilebyhash",
+                     payload, moibit_header_obj)
+        res = conn.getresponse()
+        if res.status == 200:
+            responseObject = json.loads(res.read())
+            print(
+                "updateLocationHistory(): Appending the captured data to historic data.")
+            responseObject.append(jsonData)
+            # print(responseObject)
+
+            updatedLocationHistory = json.dumps(responseObject, indent=2)
+            # print(updatedLocationHistory)
+            pre_payload = {
+                "fileName": "/dictao/"+walletAddress+".json",
+                "create": "true",
+                "createFolders": "false",
+                "pinVersion": "true",
+                "text": updatedLocationHistory
+            }
+            payload = json.dumps(pre_payload)
+            # print(payload)
+            print("updateLocationHistory(): Updating the remote file /dictao/" +
+                  walletAddress+".json with latest location history...")
+            conn.request("POST", moibit_url+"writetexttofile",
+                         payload, moibit_header_obj)
+            res = conn.getresponse()
+            # print(res.status)
+            if res.status == 200:
+                print("updateLocationHistory(): Update successful!")
+                latest_cid = json.loads(res.read())['data']['Hash']
+                return latest_cid
+            else:
+                print(
+                    "updateLocationHistory(): Update FAILED!\nResponse code:"+res.status)
+                print("More info from response body:\n"+res)
+    else:
+        print("updateLocationHistory(): Initializing a new location history!")
+        init_list = []
+        # updatedLocationHistory = json.dumps(jsonData, indent=2)
+        init_list.append(jsonData)
+        updatedLocationHistory = json.dumps(init_list, indent=2)
+        # print(updatedLocationHistory)
+
+        pre_payload = {
+            "fileName": "/dictao/"+walletAddress+".json",
+            "create": "true",
+            "createFolders": "false",
+            "pinVersion": "true",
+            "text": updatedLocationHistory
+        }
+        payload = json.dumps(pre_payload)
+        # print(payload)
+        print("updateLocationHistory(): Creating a new remote file /dictao/" +
+              walletAddress+".json with initial location history")
+        conn.request("POST", moibit_url+"writetexttofile",
+                     payload, moibit_header_obj)
+        res = conn.getresponse()
+        # print(res.status)
+        if res.status == 200:
+            print("updateLocationHistory(): Created new file successful!")
+            latest_cid = json.loads(res.read())['data']['Hash']
+            return latest_cid
+        else:
+            print(
+                "updateLocationHistory(): Creation of new file FAILED!\nResponse code:"+res.status)
+            print("More info from response body:\n"+res)
+ 
 
 def CommitTxn(id, cid):
     # print("Received wallet ID: "+id)
@@ -134,8 +204,10 @@ def CommitTxn(id, cid):
 
 def main():
     # fetch tracking from other functions tracking, wallet, etc
-    # incomplete
-
+    global Tracking_ID
+    if Tracking_ID is "":
+        Tracking_ID = createID()
+    # passing coordinate from device (ex IOT device) 
 
 if __name__ == "__main__":
     main()
