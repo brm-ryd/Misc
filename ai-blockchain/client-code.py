@@ -208,6 +208,19 @@ def main():
     if Tracking_ID is "":
         Tracking_ID = createID()
     # passing coordinate from device (ex IOT device) 
+    Tracking_ID = os.environ['WALLET_ADDRESS']
+    print("# Setting tracking ID: ", os.environ['WALLET_ADDRESS'])
+
+    # Getting the current geo-coordinates of the device
+    print("# Getting the current geo-coordinates of the device from GMaps API")
+    (lat, long) = getGeoCordinates()
+    print("Received location data: ", lat, long)
+
+    # Reading the current UTC based Unix timestamp of the device
+    print("# Reading the current UTC based Unix timestamp of the device")
+    timestamp = getCurrentTime()
+    print("Got the current timestamp: ", timestamp)
+
 
 if __name__ == "__main__":
     main()
