@@ -209,17 +209,30 @@ def main():
         Tracking_ID = createID()
     # passing coordinate from device (ex IOT device) 
     Tracking_ID = os.environ['WALLET_ADDRESS']
-    print("# Setting tracking ID: ", os.environ['WALLET_ADDRESS'])
+    ## print("# Setting tracking ID: ", os.environ['WALLET_ADDRESS'])
 
     # Getting the current geo-coordinates of the device
-    print("# Getting the current geo-coordinates of the device from GMaps API")
+    ## print("# Getting the current geo-coordinates of the device from GMaps API")
     (lat, long) = getGeoCordinates()
-    print("Received location data: ", lat, long)
+    ## print("Received location data: ", lat, long)
 
     # Reading the current UTC based Unix timestamp of the device
     print("# Reading the current UTC based Unix timestamp of the device")
     timestamp = getCurrentTime()
-    print("Got the current timestamp: ", timestamp)
+    ## print("Got the current timestamp: ", timestamp)
+    # Generate the JSON structure
+    jsonData = Marshal(Tracking_ID, lat, long, timestamp)
+    ## print(jsonData)
+
+    # Updating the location history to IPFS-based MoiBit network
+    print("# Updating the location history to IPFS-based MoiBit network")
+    latest_cid = updateLocationHistory(Tracking_ID, jsonData)
+    # print(latest_cid)
+
+    # Publish to Ethereum
+    print("# Publish to Ethereum")
+    txnHash = CommitTxn(Tracking_ID, latest_cid)
+    print("https://kovan.etherscan.io/tx/"+txnHash)
 
 
 if __name__ == "__main__":
